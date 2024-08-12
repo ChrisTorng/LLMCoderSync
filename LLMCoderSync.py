@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 import pathlib
 import stat
 import io
@@ -68,7 +69,10 @@ def main():
     os.makedirs(sync_folder_path)
     
     sync_folder(current_folder, sync_folder_path, gitignore_patterns, claudeignore_patterns)
-    print(f"Sync completed. Files have been copied to {sync_folder_path}")
+    print(f'Total files copied: {sum(1 for _ in os.walk(sync_folder_path))}')
+    print(f'Sync completed. Files have been copied to {sync_folder_path}')
+    print('Executing CLI command: claudesync project sync')
+    subprocess.run(['claudesync', 'project', 'sync'], check=True)
 
 if __name__ == "__main__":
     main()
