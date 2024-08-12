@@ -36,7 +36,7 @@ def main():
     sync_folder_path = os.path.join(parent_folder, sync_folder_name)
     
     sync_folder(current_folder, sync_folder_path, ignore_patterns)
-    print(f"同步完成。檔案已複製到 {sync_folder_path}")
+    print(f"Sync completed. Files have been copied to {sync_folder_path}")
 
 if __name__ == "__main__":
     main()
