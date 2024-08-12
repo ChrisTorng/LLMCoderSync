@@ -3,14 +3,14 @@ import shutil
 import pathlib
 import stat
 
-def read_gitignore(path):
+def read_ignore_file(path):
     ignore_patterns = []
     if os.path.exists(path):
         with open(path, 'r') as f:
             ignore_patterns = [line.strip() for line in f if line.strip() and not line.startswith('#')]
     return ignore_patterns
 
-def should_ignore(path, ignore_patterns):
+def should_ignore(path, gitignore_patterns, claudeignore_patterns):
     full_path = os.path.abspath(path)
     if os.name == 'nt':
         attributes = os.stat(full_path).st_file_attributes
@@ -19,20 +19,23 @@ def should_ignore(path, ignore_patterns):
     elif os.name == 'posix':
         if os.path.basename(full_path).startswith('.'):
             return True
-    for pattern in ignore_patterns:
+    for pattern in gitignore_patterns:
+        if pathlib.Path(path).match(pattern):
+            return True
+    for pattern in claudeignore_patterns:
         if pathlib.Path(path).match(pattern):
             return True
     return False
 
-def sync_folder(src_folder, dest_folder, ignore_patterns):
+def sync_folder(src_folder, dest_folder, gitignore_patterns, claudeignore_patterns):
     for root, dirs, files in os.walk(src_folder, topdown=True):
         rel_root = os.path.relpath(root, src_folder)
-        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(rel_root, d), ignore_patterns)]
-        if should_ignore(rel_root, ignore_patterns):
+        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(rel_root, d), gitignore_patterns, claudeignore_patterns)]
+        if should_ignore(rel_root, gitignore_patterns, claudeignore_patterns):
             continue
         for file in files:
             rel_path = os.path.join(rel_root, file)
-            if not should_ignore(rel_path, ignore_patterns):
+            if not should_ignore(rel_path, gitignore_patterns, claudeignore_patterns):
                 src_path = os.path.join(root, file)
                 dest_path = os.path.join(dest_folder, rel_path)
                 os.makedirs(os.path.dirname(dest_path), exist_ok=True)
@@ -43,7 +46,10 @@ def sync_folder(src_folder, dest_folder, ignore_patterns):
 def main():
     current_folder = os.getcwd()
     gitignore_path = os.path.join(current_folder, '.gitignore')
-    ignore_patterns = read_gitignore(gitignore_path)
+    claudeignore_path = os.path.join(current_folder, '.claudeignore')
+    gitignore_patterns = read_ignore_file(gitignore_path)
+    claudeignore_patterns = read_ignore_file(claudeignore_path)
+    ignore_patterns = list(set(gitignore_patterns + claudeignore_patterns))
     
     parent_folder = os.path.dirname(current_folder)
     current_folder_name = os.path.basename(current_folder)
@@ -54,7 +60,7 @@ def main():
         shutil.rmtree(sync_folder_path)
     os.makedirs(sync_folder_path)
     
-    sync_folder(current_folder, sync_folder_path, ignore_patterns)
+    sync_folder(current_folder, sync_folder_path, gitignore_patterns, claudeignore_patterns)
     print(f"Sync completed. Files have been copied to {sync_folder_path}")
 
 if __name__ == "__main__":

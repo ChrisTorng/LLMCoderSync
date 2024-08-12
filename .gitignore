@@ -1,2 +1,2 @@
-should-not-be-copied.txt
-#should-be-copied.txt
+git-ignore.txt
+#LLMCoderSync.py

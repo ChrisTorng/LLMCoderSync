@@ -1,0 +1,6 @@
+.claudeignore
+.gitignore
+LICENSE
+README.md
+claude-ignore.txt
+#LLMCoderSync.py
