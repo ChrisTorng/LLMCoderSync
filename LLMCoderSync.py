@@ -10,14 +10,17 @@ def read_gitignore(path):
     return ignore_patterns
 
 def should_ignore(path, ignore_patterns):
+    if any(path.startswith('.') for path in pathlib.Path(path).parts):
+        return True
     for pattern in ignore_patterns:
         if pathlib.Path(path).match(pattern):
             return True
     return False
 
 def sync_folder(src_folder, dest_folder, ignore_patterns):
-    for root, dirs, files in os.walk(src_folder):
+    for root, dirs, files in os.walk(src_folder, topdown=True):
         rel_root = os.path.relpath(root, src_folder)
+        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(rel_root, d), ignore_patterns)]
         if should_ignore(rel_root, ignore_patterns):
             continue
         for file in files:
@@ -29,9 +32,6 @@ def sync_folder(src_folder, dest_folder, ignore_patterns):
                 if not os.path.exists(dest_path) or os.stat(src_path).st_mtime > os.stat(dest_path).st_mtime:
                     shutil.copy2(src_path, dest_path)
                     print(f'Copied: {rel_path}')
-        for dir in dirs:
-            if should_ignore(os.path.join(rel_root, dir), ignore_patterns):
-                dirs.remove(dir)
 
 def main():
     current_folder = os.getcwd()
