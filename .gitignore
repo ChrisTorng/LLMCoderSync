@@ -1,2 +1,5 @@
+build/**
+dist/**
 git-ignore.txt
 #LLMCoderSync.py
+LLMCoderSync.spec
