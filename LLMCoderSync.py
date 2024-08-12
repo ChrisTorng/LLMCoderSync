@@ -1,6 +1,7 @@
 import os
 import shutil
 import pathlib
+import stat
 
 def read_gitignore(path):
     ignore_patterns = []
@@ -10,8 +11,14 @@ def read_gitignore(path):
     return ignore_patterns
 
 def should_ignore(path, ignore_patterns):
-    if any(path.startswith('.') for path in pathlib.Path(path).parts):
-        return True
+    full_path = os.path.abspath(path)
+    if os.name == 'nt':
+        attributes = os.stat(full_path).st_file_attributes
+        if attributes & stat.FILE_ATTRIBUTE_HIDDEN:
+            return True
+    elif os.name == 'posix':
+        if os.path.basename(full_path).startswith('.'):
+            return True
     for pattern in ignore_patterns:
         if pathlib.Path(path).match(pattern):
             return True
