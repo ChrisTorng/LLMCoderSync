@@ -7,9 +7,18 @@ app = Flask(__name__)
 def list_files(start_path):
     gitignore_patterns, claudeignore_patterns = get_ignore_patterns(start_path)
     file_list = []
-    for root, _, files in os.walk(start_path):
+    for root, dirs, files in os.walk(start_path, topdown=True):
+        rel_root = os.path.relpath(root, start_path)
+        
+        # Filter out directories that should be ignored
+        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(rel_root, d), gitignore_patterns, claudeignore_patterns)]
+        
+        # Check if the current directory should be ignored
+        if should_ignore(rel_root, gitignore_patterns, claudeignore_patterns):
+            continue
+        
         for file in files:
-            rel_path = os.path.relpath(os.path.join(root, file), start_path)
+            rel_path = os.path.join(rel_root, file)
             if not should_ignore(rel_path, gitignore_patterns, claudeignore_patterns):
                 file_list.append(rel_path)
     return file_list
