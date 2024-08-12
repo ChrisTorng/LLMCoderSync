@@ -2,6 +2,7 @@ import os
 import shutil
 import pathlib
 import stat
+import io
 
 def read_ignore_file(path):
     ignore_patterns = []
@@ -27,6 +28,12 @@ def should_ignore(path, gitignore_patterns, claudeignore_patterns):
             return True
     return False
 
+def add_line_numbers(src_path, dest_path):
+    with io.open(src_path, 'r', encoding='utf-8', errors='ignore') as src_file:
+        with io.open(dest_path, 'w', encoding='utf-8') as dest_file:
+            for i, line in enumerate(src_file, 1):
+                dest_file.write(f'{i:>3}. {line}')
+
 def sync_folder(src_folder, dest_folder, gitignore_patterns, claudeignore_patterns):
     for root, dirs, files in os.walk(src_folder, topdown=True):
         rel_root = os.path.relpath(root, src_folder)
@@ -40,8 +47,8 @@ def sync_folder(src_folder, dest_folder, gitignore_patterns, claudeignore_patter
                 dest_path = os.path.join(dest_folder, rel_path)
                 os.makedirs(os.path.dirname(dest_path), exist_ok=True)
                 if not os.path.exists(dest_path) or os.stat(src_path).st_mtime > os.stat(dest_path).st_mtime:
-                    shutil.copy2(src_path, dest_path)
-                    print(f'Copied: {rel_path}')
+                    add_line_numbers(src_path, dest_path)
+                    print(f'Copied with line numbers: {rel_path}')
 
 def main():
     current_folder = os.getcwd()
