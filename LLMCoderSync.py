@@ -11,7 +11,6 @@ def read_ignore_file(path):
         with open(path, 'r') as f:
             ignore_patterns = [line.strip() for line in f if line.strip() and not line.startswith('#')]
     return ignore_patterns
-    linenumberignore_patterns = read_ignore_file(os.path.join(current_folder, '.linenumberignore'))
 
 def should_ignore(path, gitignore_patterns, claudeignore_patterns):
     full_path = os.path.abspath(path)
@@ -22,13 +21,17 @@ def should_ignore(path, gitignore_patterns, claudeignore_patterns):
     elif os.name == 'posix':
         if os.path.basename(full_path).startswith('.'):
             return True
-    for pattern in gitignore_patterns:
-        if pathlib.Path(path).match(pattern):
-            return True
-    for pattern in claudeignore_patterns:
+    for pattern in gitignore_patterns + claudeignore_patterns:
         if pathlib.Path(path).match(pattern):
             return True
     return False
+
+def get_ignore_patterns(current_folder):
+    gitignore_path = os.path.join(current_folder, '.gitignore')
+    claudeignore_path = os.path.join(current_folder, '.claudeignore')
+    gitignore_patterns = read_ignore_file(gitignore_path)
+    claudeignore_patterns = read_ignore_file(claudeignore_path)
+    return gitignore_patterns, claudeignore_patterns
 
 def add_line_numbers(src_path, dest_path, linenumberignore_patterns):
     rel_path = os.path.relpath(src_path, os.getcwd())
@@ -62,12 +65,8 @@ def sync_folder(src_folder, dest_folder, gitignore_patterns, claudeignore_patter
 
 def main():
     current_folder = os.getcwd()
-    gitignore_path = os.path.join(current_folder, '.gitignore')
-    claudeignore_path = os.path.join(current_folder, '.claudeignore')
-    gitignore_patterns = read_ignore_file(gitignore_path)
-    claudeignore_patterns = read_ignore_file(claudeignore_path)
+    gitignore_patterns, claudeignore_patterns = get_ignore_patterns(current_folder)
     linenumberignore_patterns = read_ignore_file(os.path.join(current_folder, '.linenumberignore'))
-    ignore_patterns = list(set(gitignore_patterns + claudeignore_patterns))
     
     parent_folder = os.path.dirname(current_folder)
     current_folder_name = os.path.basename(current_folder)
