@@ -18,19 +18,27 @@ h1 {
     text-align: center;
 }
 
-.file-list {
-    list-style-type: none;
-    padding: 0;
+.file-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.file-item {
-    background: #fff;
-    margin-bottom: 10px;
+.file-table th, .file-table td {
     padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-.file-item:hover {
-    background: #f0f0f0;
+.file-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.file-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.sync-checkbox, .linenumber-checkbox {
+    margin: 0;
+    padding: 0;
 }

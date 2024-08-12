@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>File List</title>
+    <title>{{ current_folder }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='LLMCoderServer.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Files in Current Directory</h1>
-        <ul class="file-list">
-        {% for file in files %}
-            <li class="file-item">{{ file }}</li>
-        {% endfor %}
-        </ul>
+        <h1>{{ current_folder }}</h1>
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>Sync</th>
+                    <th>Line number</th>
+                    <th>File</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr class="file-item">
+                    <td><input type="checkbox" class="sync-checkbox" checked></td>
+                    <td><input type="checkbox" class="linenumber-checkbox" checked></td>
+                    <td>{{ file }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

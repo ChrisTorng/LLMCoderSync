@@ -28,9 +28,7 @@ def list_files(start_path):
 def index():
     current_folder = os.getcwd()
     files = list_files(current_folder)
-    return render_template('LLMCoderServer.html', files=files)
-    files = list_files(current_folder)
-    return render_template_string(html, files=files)
+    return render_template('LLMCoderServer.html', files=files, current_folder=current_folder)
 
 if __name__ == '__main__':
     app.run(debug=True)
