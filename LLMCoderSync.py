@@ -17,13 +17,21 @@ def should_ignore(path, ignore_patterns):
 
 def sync_folder(src_folder, dest_folder, ignore_patterns):
     for root, dirs, files in os.walk(src_folder):
+        rel_root = os.path.relpath(root, src_folder)
+        if should_ignore(rel_root, ignore_patterns):
+            continue
         for file in files:
-            src_path = os.path.join(root, file)
-            rel_path = os.path.relpath(src_path, src_folder)
+            rel_path = os.path.join(rel_root, file)
             if not should_ignore(rel_path, ignore_patterns):
+                src_path = os.path.join(root, file)
                 dest_path = os.path.join(dest_folder, rel_path)
                 os.makedirs(os.path.dirname(dest_path), exist_ok=True)
-                shutil.copy2(src_path, dest_path)
+                if not os.path.exists(dest_path) or os.stat(src_path).st_mtime > os.stat(dest_path).st_mtime:
+                    shutil.copy2(src_path, dest_path)
+                    print(f'Copied: {rel_path}')
+        for dir in dirs:
+            if should_ignore(os.path.join(rel_root, dir), ignore_patterns):
+                dirs.remove(dir)
 
 def main():
     current_folder = os.getcwd()
@@ -34,6 +42,10 @@ def main():
     current_folder_name = os.path.basename(current_folder)
     sync_folder_name = f"{current_folder_name}.sync"
     sync_folder_path = os.path.join(parent_folder, sync_folder_name)
+    
+    if os.path.exists(sync_folder_path):
+        shutil.rmtree(sync_folder_path)
+    os.makedirs(sync_folder_path)
     
     sync_folder(current_folder, sync_folder_path, ignore_patterns)
     print(f"Sync completed. Files have been copied to {sync_folder_path}")
