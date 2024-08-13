@@ -3,39 +3,60 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
 }
 
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-    padding: 20px;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #2d2d2d;
 }
 
 h1 {
-    color: #333;
-    text-align: center;
+    color: #d4d4d4;
+    margin: 0;
+    font-size: 24px;
+}
+
+.current-folder {
+    font-size: 14px;
+    color: #a0a0a0;
+}
+
+.github-icon {
+    color: #d4d4d4;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.container {
+    width: 95%;
+    margin: auto;
+    padding: 20px;
 }
 
 .file-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
 .file-table th, .file-table td {
     padding: 10px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #3e3e3e;
 }
 
 .file-table th {
-    background-color: #f2f2f2;
+    background-color: #2d2d2d;
     font-weight: bold;
 }
 
 .file-table tr:hover {
-    background-color: #f5f5f5;
+    background-color: #2a2a2a;
 }
 
 .sync-checkbox, .linenumber-checkbox {
