@@ -1,6 +1,7 @@
 .claudeignore
 .gitignore
 .linenumberignore
+.syncignore
 LICENSE
 README.md
 claude-ignore.txt
