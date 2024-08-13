@@ -1,7 +1,6 @@
 import os
-from flask import Flask, render_template_string
-from flask import render_template
-from LLMCoderSync import should_ignore, get_ignore_patterns
+from flask import Flask, render_template
+from LLMCoderSync import should_ignore, get_ignore_patterns, read_ignore_file
 
 app = Flask(__name__, template_folder='.')
 
@@ -21,7 +20,8 @@ def list_files(start_path):
         for file in files:
             rel_path = os.path.join(rel_root, file)
             if not should_ignore(rel_path, gitignore_patterns, claudeignore_patterns):
-                file_list.append(rel_path)
+                should_sync = not should_ignore(rel_path, [], claudeignore_patterns)
+                file_list.append((rel_path, should_sync))
     return file_list
 
 @app.route('/')

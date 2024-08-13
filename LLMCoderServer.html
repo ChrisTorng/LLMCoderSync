@@ -16,9 +16,9 @@
                 </tr>
             </thead>
             <tbody>
-            {% for file in files %}
+            {% for file, should_sync in files %}
                 <tr class="file-item">
-                    <td><input type="checkbox" class="sync-checkbox" checked></td>
+                    <td><input type="checkbox" class="sync-checkbox" {% if should_sync %}checked{% endif %}></td>
                     <td><input type="checkbox" class="linenumber-checkbox" checked></td>
                     <td>{{ file }}</td>
                 </tr>
