@@ -1,36 +1,47 @@
 document.addEventListener('DOMContentLoaded', function() {
     const syncCheckboxes = document.querySelectorAll('.sync-checkbox');
+    const lineNumberCheckboxes = document.querySelectorAll('.linenumber-checkbox');
+
+    function updateCheckboxState(checkbox, url, fileKey, shouldKey) {
+        const filePath = checkbox.closest('tr').querySelector('td:last-child').textContent;
+        const shouldValue = checkbox.checked;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                [fileKey]: filePath,
+                [shouldKey]: shouldValue
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log(`${shouldKey} status updated for ${filePath}`);
+            } else {
+                console.error(`Failed to update ${shouldKey} status for ${filePath}`);
+                // Revert the checkbox state if the update failed
+                checkbox.checked = !shouldValue;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Revert the checkbox state if there was an error
+            checkbox.checked = !shouldValue;
+        });
+    }
 
     syncCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
-            const filePath = this.closest('tr').querySelector('td:last-child').textContent;
-            const shouldSync = this.checked;
+            updateCheckboxState(this, '/update_sync', 'file', 'should_sync');
+        });
+    });
 
-            fetch('/update_sync', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    file: filePath,
-                    should_sync: shouldSync
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    console.log(`Sync status updated for ${filePath}`);
-                } else {
-                    console.error(`Failed to update sync status for ${filePath}`);
-                    // Revert the checkbox state if the update failed
-                    this.checked = !shouldSync;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Revert the checkbox state if there was an error
-                this.checked = !shouldSync;
-            });
+    lineNumberCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateCheckboxState(this, '/update_line_numbers', 'file', 'should_add_line_numbers');
         });
     });
 });

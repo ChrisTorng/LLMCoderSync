@@ -50,5 +50,25 @@ def update_sync():
     
     return jsonify({'status': 'success'})
 
+@app.route('/update_line_numbers', methods=['POST'])
+def update_line_numbers():
+    file_path = request.json['file']
+    should_add_line_numbers = request.json['should_add_line_numbers']
+    linenumberignore_path = os.path.join(os.getcwd(), '.linenumberignore')
+    
+    with open(linenumberignore_path, 'r') as f:
+        lines = f.readlines()
+    
+    if should_add_line_numbers:
+        lines = [line for line in lines if line.strip() != file_path]
+    else:
+        if file_path + '\n' not in lines:
+            lines.append(file_path + '\n')
+    
+    with open(linenumberignore_path, 'w') as f:
+        f.writelines(lines)
+    
+    return jsonify({'status': 'success'})
+
 if __name__ == '__main__':
     app.run(debug=True)
