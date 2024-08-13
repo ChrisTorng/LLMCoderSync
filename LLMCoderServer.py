@@ -1,8 +1,14 @@
 import os
+import sys
 from flask import Flask, render_template, request, jsonify
 from LLMCoderSync import should_ignore, get_ignore_patterns, should_sync, should_add_line_numbers, read_ignore_file
 
-app = Flask(__name__, template_folder='.')
+if getattr(sys, 'frozen', False):
+    template_folder = os.path.join(sys._MEIPASS, 'templates')
+    static_folder = os.path.join(sys._MEIPASS, 'static')
+    app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
+else:
+    app = Flask(__name__, template_folder='.')
 
 def list_files(start_path):
     gitignore_patterns, claudeignore_patterns, syncignore_patterns = get_ignore_patterns(start_path)
