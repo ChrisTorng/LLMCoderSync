@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from LLMCoderSync import should_ignore, get_ignore_patterns, should_sync, should_add_line_numbers, read_ignore_file
@@ -106,23 +107,22 @@ def sync():
     
     # Create the SyncCommand file
     sync_command_path = os.path.join(current_folder, 'SyncCommand')
-    with open(sync_command_path, 'w') as f:
-        if os.name == 'nt':
-            f.write('@echo off\npython LLMCoderSync.py\nclaudesync project sync')
-        else:
-            f.write('#!/bin/sh\npython LLMCoderSync.py\nclaudesync project sync')
-    
+    if os.name == 'nt':
+        sync_command_path += '.cmd'
+   
     # Make the file executable on Unix-like systems
     if os.name != 'nt':
         os.chmod(sync_command_path, 0o755)
     
-    # Execute the command
-    if os.name == 'nt':
-        os.system(f'start {sync_command_path}')
-    else:
-        os.system(f'sh {sync_command_path}')
-    
-    return jsonify({'status': 'success'})
+    # Execute the command and capture output
+    try:
+        if os.name == 'nt':
+            output = subprocess.check_output(sync_command_path, shell=True, stderr=subprocess.STDOUT, universal_newlines=True)
+        else:
+            output = subprocess.check_output(['sh', sync_command_path], stderr=subprocess.STDOUT, universal_newlines=True)
+        return jsonify({'status': 'success', 'output': output})
+    except subprocess.CalledProcessError as e:
+        return jsonify({'status': 'error', 'error': str(e), 'output': e.output})
 
 
 if __name__ == '__main__':

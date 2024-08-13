@@ -12,7 +12,8 @@
         <a href="https://github.com/ChrisTorng/LLMCoderSync" target="_blank" class="github-icon"><i class="fab fa-github"></i></a>
     </div>
     <div class="container">
-        <table class="file-table">
+        <div class="file-list">
+            <table class="file-table">
             <thead>
                 <tr>
                     <th>Sync</th>
@@ -31,6 +32,11 @@
             {% endfor %}
             </tbody>
         </table>
+        </div>
+        <div class="output-container">
+            <h2>Sync Output</h2>
+            <pre id="syncOutput"></pre>
+        </div>
     </div>
     <script src="{{ url_for('static', filename='LLMCoderServer.js') }}"></script>
 </body>

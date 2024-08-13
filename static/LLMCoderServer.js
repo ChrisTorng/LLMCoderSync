@@ -46,7 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const syncAllButton = document.getElementById('syncAllButton');
+    const syncOutput = document.getElementById('syncOutput');
+
     syncAllButton.addEventListener('click', function() {
+        syncOutput.textContent = 'Syncing...'; // Show initial message
         fetch('/sync', {
             method: 'POST',
             headers: {
@@ -57,16 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                console.log('Sync completed for all files');
-                alert('Sync completed for all files');
+                syncOutput.textContent = data.output;
             } else {
-                console.error('Failed to sync all files');
-                alert('Failed to sync all files');
+                syncOutput.textContent = 'Failed to sync all files. Error: ' + data.error;
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred during sync');
+            syncOutput.textContent = 'An error occurred during sync: ' + error;
         });
     });
 });

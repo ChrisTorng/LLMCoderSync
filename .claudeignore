@@ -4,6 +4,5 @@
 .syncignore
 LICENSE
 README.md
-claude-ignore.txt
-LLMCoderServer.spec
-LLMCoderSync.spec
+*.spec
+SyncCommand*

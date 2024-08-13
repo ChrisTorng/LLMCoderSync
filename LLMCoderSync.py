@@ -102,8 +102,7 @@ def main():
     os.makedirs(sync_folder_path)
     
     total_files = sync_folder(current_folder, sync_folder_path, gitignore_patterns, claudeignore_patterns, syncignore_patterns, linenumberignore_patterns)
-    print(f'Total files copied: {total_files}')
-    print(f'Sync completed. Files have been copied to {sync_folder_path}')
+    print(f'{total_files} files have been copied to {sync_folder_path}')
 
 if __name__ == "__main__":
     main()

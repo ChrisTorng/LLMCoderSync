@@ -65,6 +65,43 @@ h1 {
     background-color: #2a2a2a;
 }
 
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.file-list {
+    width: 48%;
+}
+
+.output-container {
+    width: 48%;
+    background-color: #2d2d2d;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#syncOutput {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#syncAllButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 .check-column {
     width: 100px;
 }
