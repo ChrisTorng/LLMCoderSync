@@ -36,17 +36,28 @@ def update_sync():
     should_sync = request.json['should_sync']
     syncignore_path = os.path.join(os.getcwd(), '.syncignore')
     
+    # Get all files in the current directory
+    all_files = [f for f in list_files(os.getcwd()) if f[0] != '.syncignore']
+    
+    # Create .syncignore if it doesn't exist
+    if not os.path.exists(syncignore_path):
+        open(syncignore_path, 'w').close()
+    
+    # Read existing .syncignore content
     with open(syncignore_path, 'r') as f:
-        lines = f.readlines()
+        ignored_files = set(line.strip() for line in f.readlines())
     
+    # Update the set based on the current file
     if should_sync:
-        lines = [line for line in lines if line.strip() != file_path]
+        ignored_files.discard(file_path)
     else:
-        if file_path + '\n' not in lines:
-            lines.append(file_path + '\n')
+        ignored_files.add(file_path)
     
+    # Write the updated content back to .syncignore
     with open(syncignore_path, 'w') as f:
-        f.writelines(lines)
+        for file, _, _ in all_files:
+            if file in ignored_files:
+                f.write(f"{file}\n")
     
     return jsonify({'status': 'success'})
 
@@ -56,18 +67,29 @@ def update_line_numbers():
     should_add_line_numbers = request.json['should_add_line_numbers']
     linenumberignore_path = os.path.join(os.getcwd(), '.linenumberignore')
     
+    # Get all files in the current directory
+    all_files = [f for f in list_files(os.getcwd()) if f[0] != '.linenumberignore']
+    
+    # Create .linenumberignore if it doesn't exist
+    if not os.path.exists(linenumberignore_path):
+        open(linenumberignore_path, 'w').close()
+    
+    # Read existing .linenumberignore content
     with open(linenumberignore_path, 'r') as f:
-        lines = f.readlines()
+        ignored_files = set(line.strip() for line in f.readlines())
     
+    # Update the set based on the current file
     if should_add_line_numbers:
-        lines = [line for line in lines if line.strip() != file_path]
+        ignored_files.discard(file_path)
     else:
-        if file_path + '\n' not in lines:
-            lines.append(file_path + '\n')
+        ignored_files.add(file_path)
     
+    # Write the updated content back to .linenumberignore
     with open(linenumberignore_path, 'w') as f:
-        f.writelines(lines)
-    
+        for file, _, _ in all_files:
+            if file in ignored_files:
+                f.write(f"{file}\n")
+   
     return jsonify({'status': 'success'})
 
 if __name__ == '__main__':
