@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template
-from LLMCoderSync import should_ignore, get_ignore_patterns
+from LLMCoderSync import should_ignore, get_ignore_patterns, should_sync
 
 app = Flask(__name__, template_folder='.')
 
@@ -11,17 +11,15 @@ def list_files(start_path):
         rel_root = os.path.relpath(root, start_path)
         
         # Filter out directories that should be ignored by .gitignore or .claudeignore
-        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(rel_root, d), gitignore_patterns, claudeignore_patterns, syncignore_patterns)]
-        
-        # Check if the current directory should be ignored by .gitignore or .claudeignore
-        if should_ignore(rel_root, gitignore_patterns, claudeignore_patterns, syncignore_patterns):
+        dirs[:] = [d for d in dirs if not should_ignore(os.path.join(rel_root, d), gitignore_patterns, claudeignore_patterns)]
+        if should_ignore(rel_root, gitignore_patterns, claudeignore_patterns):
             continue
         
         for file in files:
             rel_path = os.path.join(rel_root, file)
-            if not should_ignore(rel_path, gitignore_patterns, claudeignore_patterns, syncignore_patterns):
-                should_sync = not should_ignore(rel_path, syncignore_patterns, [], [])
-                file_list.append((rel_path, should_sync))
+            if not should_ignore(rel_path, gitignore_patterns, claudeignore_patterns):
+                should_sync_file = should_sync(rel_path, syncignore_patterns)
+                file_list.append((rel_path, should_sync_file))
     return file_list
 
 @app.route('/')
