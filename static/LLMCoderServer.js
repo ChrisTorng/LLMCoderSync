@@ -69,4 +69,23 @@ document.addEventListener('DOMContentLoaded', function() {
             syncOutput.textContent = 'An error occurred during sync: ' + error;
         });
     });
+
+    const fileLinks = document.querySelectorAll('.file-link');
+    const outputTitle = document.getElementById('outputTitle');
+
+    fileLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const filePath = this.textContent;
+            fetch(`/file_content/${encodeURIComponent(filePath)}`)
+                .then(response => response.text())
+                .then(content => {
+                    syncOutput.textContent = content;
+                    outputTitle.textContent = filePath;
+                })
+                .catch(error => {
+                    syncOutput.textContent = `Error loading file: ${error}`;
+                });
+        });
+    });
 });

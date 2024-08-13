@@ -124,6 +124,15 @@ def sync():
     except subprocess.CalledProcessError as e:
         return jsonify({'status': 'error', 'error': str(e), 'output': e.output})
 
+@app.route('/file_content/<path:file_path>')
+def file_content(file_path):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+        return content
+    except Exception as e:
+        return f"Error reading file: {str(e)}", 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

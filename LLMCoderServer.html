@@ -27,14 +27,14 @@
                 <tr class="file-item">
                     <td><input type="checkbox" class="sync-checkbox" {% if should_sync %}checked{% endif %}></td>
                     <td><input type="checkbox" class="linenumber-checkbox" {% if should_add_line_numbers %}checked{% endif %}></td>
-                    <td class="file-path">{{ file }}</td>
+                    <td class="file-path"><a href="#" class="file-link">{{ file }}</a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         </div>
         <div class="output-container">
-            <h2>Sync Output</h2>
+            <h2 id="outputTitle">Sync Output</h2>
             <pre id="syncOutput"></pre>
         </div>
     </div>
