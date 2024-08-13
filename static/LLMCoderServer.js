@@ -44,4 +44,29 @@ document.addEventListener('DOMContentLoaded', function() {
             updateCheckboxState(this, '/update_line_numbers', 'file', 'should_add_line_numbers');
         });
     });
+
+    const syncAllButton = document.getElementById('syncAllButton');
+    syncAllButton.addEventListener('click', function() {
+        fetch('/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: 'sync_all' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Sync completed for all files');
+                alert('Sync completed for all files');
+            } else {
+                console.error('Failed to sync all files');
+                alert('Failed to sync all files');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred during sync');
+        });
+    });
 });

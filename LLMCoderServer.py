@@ -100,5 +100,30 @@ def update_line_numbers():
    
     return jsonify({'status': 'success'})
 
+@app.route('/sync', methods=['POST'])
+def sync():
+    current_folder = os.getcwd()
+    
+    # Create the SyncCommand file
+    sync_command_path = os.path.join(current_folder, 'SyncCommand')
+    with open(sync_command_path, 'w') as f:
+        if os.name == 'nt':
+            f.write('@echo off\npython LLMCoderSync.py\nclaudesync project sync')
+        else:
+            f.write('#!/bin/sh\npython LLMCoderSync.py\nclaudesync project sync')
+    
+    # Make the file executable on Unix-like systems
+    if os.name != 'nt':
+        os.chmod(sync_command_path, 0o755)
+    
+    # Execute the command
+    if os.name == 'nt':
+        os.system(f'start {sync_command_path}')
+    else:
+        os.system(f'sh {sync_command_path}')
+    
+    return jsonify({'status': 'success'})
+
+
 if __name__ == '__main__':
     app.run(debug=True)

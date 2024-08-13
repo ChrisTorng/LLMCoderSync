@@ -1,6 +1,3 @@
 __pycache__/*
 build/**
 dist/**
-git-ignore.txt
-#LLMCoderSync.py
-LLMCoderSync.spec
