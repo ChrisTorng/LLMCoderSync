@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from LLMCoderSync import should_ignore, get_ignore_patterns, should_sync, should_add_line_numbers, read_ignore_file
 
 app = Flask(__name__, template_folder='.')
@@ -29,6 +29,26 @@ def index():
     current_folder = os.getcwd()
     files = list_files(current_folder)
     return render_template('LLMCoderServer.html', files=files, current_folder=current_folder)
+
+@app.route('/update_sync', methods=['POST'])
+def update_sync():
+    file_path = request.json['file']
+    should_sync = request.json['should_sync']
+    syncignore_path = os.path.join(os.getcwd(), '.syncignore')
+    
+    with open(syncignore_path, 'r') as f:
+        lines = f.readlines()
+    
+    if should_sync:
+        lines = [line for line in lines if line.strip() != file_path]
+    else:
+        if file_path + '\n' not in lines:
+            lines.append(file_path + '\n')
+    
+    with open(syncignore_path, 'w') as f:
+        f.writelines(lines)
+    
+    return jsonify({'status': 'success'})
 
 if __name__ == '__main__':
     app.run(debug=True)
