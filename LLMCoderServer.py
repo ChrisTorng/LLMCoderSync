@@ -126,13 +126,26 @@ def sync():
 
 @app.route('/file_content/<path:file_path>')
 def file_content(file_path):
-    try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.read()
-        return content
-    except Exception as e:
-        return f"Error reading file: {str(e)}", 500
+    current_folder = os.getcwd()
+    parent_folder = os.path.dirname(current_folder)
+    current_folder_name = os.path.basename(current_folder)
+    sync_folder_name = f"{current_folder_name}.sync"
+    sync_folder_path = os.path.join(parent_folder, sync_folder_name)
+    sync_file_path = os.path.join(sync_folder_path, file_path)
 
+    try:
+        if os.path.exists(sync_folder_path) and os.path.exists(sync_file_path) and \
+           os.path.getmtime(sync_file_path) > os.path.getmtime(file_path):
+            with open(sync_file_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+            status = "synced"
+        else:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+            status = "not synced!"
+        return jsonify({'content': content, 'status': status})
+    except Exception as e:
+        return jsonify({'error': f"Error reading file: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -79,10 +79,15 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const filePath = this.textContent;
             fetch(`/file_content/${encodeURIComponent(filePath)}`)
-                .then(response => response.text())
-                .then(content => {
-                    syncOutput.textContent = content;
-                    outputTitle.textContent = filePath;
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        syncOutput.textContent = data.error;
+                        outputTitle.textContent = filePath;
+                    } else {
+                        syncOutput.textContent = data.content;
+                        outputTitle.textContent = `${filePath} ${data.status}`;
+                    }
                 })
                 .catch(error => {
                     syncOutput.textContent = `Error loading file: ${error}`;
