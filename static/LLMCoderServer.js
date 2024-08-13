@@ -47,8 +47,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const syncAllButton = document.getElementById('syncAllButton');
     const syncOutput = document.getElementById('syncOutput');
+    const outputTitle = document.getElementById('outputTitle');
 
     syncAllButton.addEventListener('click', function() {
+        outputTitle.textContent = 'Sync Output';
         syncOutput.textContent = 'Syncing...'; // Show initial message
         fetch('/sync', {
             method: 'POST',
@@ -71,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const fileLinks = document.querySelectorAll('.file-link');
-    const outputTitle = document.getElementById('outputTitle');
 
     fileLinks.forEach(link => {
         link.addEventListener('click', function(e) {
