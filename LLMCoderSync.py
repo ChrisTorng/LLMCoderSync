@@ -50,10 +50,17 @@ def should_sync(path, syncignore_patterns):
             return False
     return True
 
+def should_add_line_numbers(path, linenumberignore_patterns):
+    for pattern in linenumberignore_patterns:
+        if pathlib.Path(path).match(pattern):
+            return False
+    return True
+
 def add_line_numbers(src_path, dest_path, linenumberignore_patterns):
     rel_path = os.path.relpath(src_path, os.getcwd())
-    if any(pathlib.Path(rel_path).match(pattern) for pattern in linenumberignore_patterns):
+    if not should_add_line_numbers(rel_path, linenumberignore_patterns):
         shutil.copy2(src_path, dest_path)
+        return False
         return False
     with io.open(src_path, 'r', encoding='utf-8', errors='ignore') as src_file:
         with io.open(dest_path, 'w', encoding='utf-8') as dest_file:
