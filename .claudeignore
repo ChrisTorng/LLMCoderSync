@@ -5,4 +5,5 @@
 LICENSE
 README.md
 claude-ignore.txt
-#LLMCoderSync.py
+LLMCoderServer.spec
+LLMCoderSync.spec
