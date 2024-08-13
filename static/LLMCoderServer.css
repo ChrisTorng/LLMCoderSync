@@ -5,6 +5,9 @@ body {
     padding: 0;
     background-color: #1e1e1e;
     color: #d4d4d4;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -33,33 +36,50 @@ h1 {
 }
 
 .container {
-    width: 95%;
-    margin: auto;
+    flex-grow: 1;
+    overflow: hidden;
     padding: 20px;
 }
 
 .file-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    overflow-y: auto;
+    display: block;
+    height: calc(100vh - 100px);
 }
 
 .file-table th, .file-table td {
-    padding: 10px;
+    padding: 5px;
     text-align: left;
-    border-bottom: 1px solid #3e3e3e;
 }
 
 .file-table th {
     background-color: #2d2d2d;
     font-weight: bold;
+    position: sticky;
+    top: 0;
 }
 
 .file-table tr:hover {
     background-color: #2a2a2a;
 }
 
+.check-column {
+    width: 100px;
+}
+
+.file-column {
+    width: auto;
+}
+
 .sync-checkbox, .linenumber-checkbox {
     margin: 0;
     padding: 0;
+}
+
+.file-path {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
