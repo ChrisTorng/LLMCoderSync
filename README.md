@@ -30,4 +30,4 @@ Claude custom instruction sample:
 
 Run `python LLMCoderServer.py` then open `http://localhost:5000/` in browser.
 
-Run `LLMCoderSync` every time after codes are modified.
+Run `LLMCoderSync` every time after codes are modified. You can add `claudesync project sync` after it, makes the command be `LLMCoderSync&claudesync project sync`.

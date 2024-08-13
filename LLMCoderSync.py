@@ -80,8 +80,6 @@ def main():
     total_files = sync_folder(current_folder, sync_folder_path, gitignore_patterns, claudeignore_patterns, linenumberignore_patterns)
     print(f'Total files copied: {total_files}')
     print(f'Sync completed. Files have been copied to {sync_folder_path}')
-    print('Executing CLI command: claudesync project sync')
-    subprocess.run(['claudesync', 'project', 'sync'], check=True)
 
 if __name__ == "__main__":
     main()
