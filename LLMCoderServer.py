@@ -135,7 +135,7 @@ def file_content(file_path):
 
     try:
         if os.path.exists(sync_folder_path) and os.path.exists(sync_file_path) and \
-           os.path.getmtime(sync_file_path) > os.path.getmtime(file_path):
+           os.path.getmtime(sync_file_path) >= os.path.getmtime(file_path):
             with open(sync_file_path, 'r', encoding='utf-8') as file:
                 content = file.read()
             status = "synced"
