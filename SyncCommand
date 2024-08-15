@@ -1,3 +1,4 @@
 #!/bin/sh
 python LLMCoderSync.py
+#.\dist\LLMCoderSync
 claudesync project sync
