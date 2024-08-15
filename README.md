@@ -11,8 +11,8 @@ pip install flask
 
 ```
 pip install pyinstaller
-pyinstaller --onefile LLMCoderSync.py
-pyinstaller LLMCoderServer.py
+pyinstaller LLMCoderSync.spec
+pyinstaller LLMCoderServer.spec
 ```
 
 Run with `./dist/LLMCoderSync` or `python LLMCoderSync.py`.
