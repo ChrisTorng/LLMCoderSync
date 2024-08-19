@@ -29,7 +29,12 @@ Then you can click `Sync All` button to run `SyncCommand`, make sure the sync is
 
 # Working with [LLMCoder](https://github.com/ChrisTorng/LLMCoder)
 
-Copy `instructions\instruction.en.md` into your project dir and sync to Claude, without line number. Other code files should apply line numbers.
+Copy `instructions\instruction.en.md` and `SyncCommand` or `SyncCommand.cmd` (Windows) into your project dir. Add `.claudeignore` file with content:
+```
+.*
+SyncCommand*
+```
+Open WebUI, uncheck `instructions\instruction.en.md`'s line number field. Other code files should apply line numbers. Then `Sync All`.
 
 Set Claude's Project custom instructions like this:
 
