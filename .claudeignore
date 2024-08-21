@@ -1,7 +1,6 @@
-.claudeignore
-.gitignore
-.linenumberignore
-.syncignore
+images/
+instructions/
+.*
 LICENSE
 README.md
 *.spec

@@ -9,7 +9,7 @@ You can modify your `SyncCommand` file for your sync tools, not limited to `LLMC
 
 You can easily choose the currently working files to sync, save more tokens from Claude usage for longer conversations.
 
-The line number options is used for [LLMCoder](https://github.com/ChrisTorng/LLMCoder), it uses code with line numbers and ask LLM to use specific JSON diff output, then apply the JSON diff to the source code. It helps you sync the output of LLM back to your source code with only one paste action, and save the output tokens for only diff part.
+The line number options is used for [LLMCoder](https://github.com/ChrisTorng/LLMCoder), it uses code with line numbers and ask LLM to use specific Markdown diff output, then apply the Markdown diff to the source code. It helps you sync the output of LLM back to your source code with only one paste action, and save the output tokens for only diff part.
 
 # Build & Usage
 
@@ -29,7 +29,7 @@ Then you can click `Sync All` button to run `SyncCommand`, make sure the sync is
 
 # Working with [LLMCoder](https://github.com/ChrisTorng/LLMCoder)
 
-Copy `instructions\instruction.en.md` into your project dir and sync to Claude, without line number. Other code files should apply line numbers.
+Copy `instructions\markdown.instruction.en.md` into your project dir and sync to Claude, without line number. Other code files should apply line numbers.
 
 Set Claude's Project custom instructions like this:
 
@@ -39,15 +39,16 @@ For any response involving modifications to existing code, strictly follow the i
 All codes should be obtained directly from the uploaded files in the Project, without referencing recent modification results.
 ```
 
-Ask Claude to modify code, it should follow the instructions, output JSON diff.
+Ask Claude to modify code, it should follow the instructions, output Markdown diff.
 
-On [LLMCoder online page](https://christorng.github.io/LLMCoder/), paste the source code, then paste the JSON, it will apply the changes to the source and copy to clipboard automatically. You can paste back to overwrite to your source.
+On [LLMCoder online page](https://christorng.github.io/LLMCoder/), paste the source code, then paste the Markdown, it will apply the changes to the source and copy to clipboard automatically. You can paste back to overwrite to your source.
 
 Click `Sync All` button on WebUI after each time the codes are modified, ready for the next prompt to reference the latest code with line numbers.
 
 # Future plan
 
-* **Integrate LLMCoder into LLMCoderSync WebUI**: So you can select a code file, paste JSON, then it write the result directly into the source, saves you more time.
-* **Use Markdown instead of JSON**: not only saves more tokens, but avoid escape char problems like forgetting to use \\" in JSON.
-* **Apply multiple files at once**: Ask LLM to add file names in JSON/Markdown diff, then it can modify them all at once.
+* **Use Markdown instead of JSON**: not only saves more tokens, but avoid escape char problems like forgetting to use \\" in JSON. Easy reading the diff output, with better correction ability.
+
+* **Integrate LLMCoder into LLMCoderSync WebUI**: So you can select a code file, paste Markdown, then it writes the result directly into the source, saves you more time.
+* **Apply multiple files at once**: Ask LLM to add file names in Markdown diff, then it can modify them all at once.
 * **Fix Off-by-One Errors automatically**: sometimes the LLM output wrong first line number. It tries to look for correct line number and apply without manual fix.

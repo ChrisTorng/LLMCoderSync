@@ -1,6 +1,6 @@
+import datetime
 import os
 import shutil
-import subprocess
 import pathlib
 import stat
 import io
@@ -61,12 +61,15 @@ def add_line_numbers(src_path, dest_path, linenumberignore_patterns):
     if not should_add_line_numbers(rel_path, linenumberignore_patterns):
         shutil.copy2(src_path, dest_path)
         return False
-        return False
     with io.open(src_path, 'r', encoding='utf-8', errors='ignore') as src_file:
         with io.open(dest_path, 'w', encoding='utf-8') as dest_file:
+            dest_file.write(f'{get_file_modification_datetime(src_path).strftime("%Y-%m-%d %H:%M:%S")}\n')
             for i, line in enumerate(src_file, 1):
                 dest_file.write(f'{i:>3}. {line}')
     return True
+
+def get_file_modification_datetime(src_path):
+     return datetime.datetime.fromtimestamp(os.path.getmtime(src_path))
 
 def sync_folder(src_folder, dest_folder, gitignore_patterns, claudeignore_patterns, syncignore_patterns, linenumberignore_patterns):
     total_files = 0
