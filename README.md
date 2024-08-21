@@ -29,15 +29,15 @@ Then you can click `Sync All` button to run `SyncCommand`, make sure the sync is
 
 # Working with [LLMCoder](https://github.com/ChrisTorng/LLMCoder)
 
-Copy `instructions\markdown.instruction.en.md` into your project dir and sync to Claude, without line number. Other code files should apply line numbers.
-
-Set Claude's Project custom instructions like this:
-
+Copy `SyncCommand` or `SyncCommand.cmd` (Windows) into your project dir. Add `.claudeignore` file with content:
 ```
-Please provide concise and brief answers unless detailed explanations are requested.
-For any response involving modifications to existing code, strictly follow the instructions in instruction.en.md.
-All codes should be obtained directly from the uploaded files in the Project, without referencing recent modification results.
+.*
+LICENSE
+SyncCommand*
 ```
+Open WebUI, unckech anything that should not be synced or adding line numbers, then `Sync All`.
+
+Set Claude's Project custom instructions with then content of `instructions\markdown.instruction.en.md` after your own specific instructions.
 
 Ask Claude to modify code, it should follow the instructions, output Markdown diff.
 
