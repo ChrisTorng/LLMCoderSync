@@ -47,8 +47,19 @@ Click `Sync All` button on WebUI after each time the codes are modified, ready f
 
 # Future plan
 
-* **Use Markdown instead of JSON**: not only saves more tokens, but avoid escape char problems like forgetting to use \\" in JSON. Easy reading the diff output, with better correction ability.
+* **Use Markdown instead of JSON**
 
-* **Integrate LLMCoder into LLMCoderSync WebUI**: So you can select a code file, paste Markdown, then it writes the result directly into the source, saves you more time.
-* **Apply multiple files at once**: Ask LLM to add file names in Markdown diff, then it can modify them all at once.
-* **Fix Off-by-One Errors automatically**: sometimes the LLM output wrong first line number. It tries to look for correct line number and apply without manual fix.
+  Not only saves more tokens, but avoid escape char problems like forgetting to use \\" in JSON. Easy reading the diff output, with better manual correction ability.
+
+* **Integrate LLMCoder into LLMCoderSync WebUI**
+
+  So you can select a code file, paste Markdown, then it writes the result directly into the source, saves you more time.
+* **Apply multiple files at once**
+
+  Ask LLM to add file names in Markdown diff, then it can modify them all at once.
+* **Fix line number errors automatically**
+
+  Sometimes the LLM output wrong first/last line number. It tries to look for correct line number and apply without manual fix.
+* **Auto Sync**
+
+  Detect file changes, then sync automatically.
