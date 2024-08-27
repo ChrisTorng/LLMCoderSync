@@ -3,7 +3,7 @@
 Work with [ClaudeSync](https://github.com/jahwag/ClaudeSync) and [LLMCoder](https://github.com/ChrisTorng/LLMCoder) for easy Claude project coding experience.
 
 ![](images/LLMCoderServer.png)
-The WebUI shows all files, excludes `.gitignore` and `.claudesync`. You choose which files to be synced with or without line number. Then press `Sync All` button to sync to target Claude project, with the help from [ClaudeSync](https://github.com/jahwag/ClaudeSync).
+The WebUI shows all files, excludes files ignored by `.gitignore` and `.claudesync`. You choose which files to be synced with or without line number. Then press `Sync All` button to sync to target Claude project, with the help from [ClaudeSync](https://github.com/jahwag/ClaudeSync).
 
 You can modify your `SyncCommand` file for your sync tools, not limited to `LLMCoderSync` and `ClaudeSync`.
 
@@ -37,11 +37,11 @@ SyncCommand*
 ```
 Open WebUI, unckech anything that should not be synced or adding line numbers, then `Sync All`.
 
-Set Claude's Project custom instructions with then content of `instructions\markdown.instruction.en.md` after your own specific instructions.
+Set Claude's Project custom instructions with then content of [instructions\markdown.instruction.en.md](instructions\markdown.instruction.en.md) after your own specific instructions.
 
 Ask Claude to modify code, it should follow the instructions, output Markdown diff.
 
-On [LLMCoder online page](https://christorng.github.io/LLMCoder/), paste the source code, then paste the Markdown, it will apply the changes to the source and copy to clipboard automatically. You can paste back to overwrite to your source.
+On [LLMCoder online page](https://christorng.github.io/LLMCoder/), paste the source code, then paste the Markdown diff, it will apply the changes to the source and copy to clipboard automatically. You can paste back to IDE to overwrite to your source.
 
 Click `Sync All` button on WebUI after each time the codes are modified, ready for the next prompt to reference the latest code with line numbers.
 

@@ -2,6 +2,6 @@ images/
 instructions/
 .*
 LICENSE
-README.md
+#README.md
 *.spec
 SyncCommand*
