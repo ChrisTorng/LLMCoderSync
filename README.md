@@ -47,9 +47,6 @@ Click `Sync All` button on WebUI after each time the codes are modified, ready f
 
 # Future plan
 
-* **Use Markdown instead of JSON**
-
-  Not only saves more tokens, but avoid escape char problems like forgetting to use \\" in JSON. Easy reading the diff output, with better manual correction ability.
 
 * **Integrate LLMCoder into LLMCoderSync WebUI**
 
