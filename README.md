@@ -1,69 +1,90 @@
 # LLMCoderSync
 
-Work with [ClaudeSync](https://github.com/jahwag/ClaudeSync) and [LLMCoder](https://github.com/ChrisTorng/LLMCoder) for easy Claude project coding experience.
+Enhance your coding experience with Claude AI by integrating [ClaudeSync](https://github.com/jahwag/ClaudeSync) and [LLMCoder](https://github.com/ChrisTorng/LLMCoder).
 
-![](images/LLMCoderServer.png)
-The WebUI shows all files, excludes files ignored by `.gitignore` and `.claudesync`. You choose which files to be synced with or without line number. Then press `Sync All` button to sync to target Claude project, with the help from [ClaudeSync](https://github.com/jahwag/ClaudeSync).
+![LLMCoderServer Interface](images/LLMCoderServer.png)
 
-You can modify your `SyncCommand` file for your sync tools, not limited to `LLMCoderSync` and `ClaudeSync`.
+The LLMCoderServer web interface displays all files in your project, excluding those ignored by `.gitignore` and `.claudesync`. You can select which files to sync, with or without line numbers. Click the `Sync All` button to synchronize your selected files to the target Claude project, utilizing [ClaudeSync](https://github.com/jahwag/ClaudeSync).
 
-You can easily choose the currently working files to sync, save more tokens from Claude usage for longer conversations.
+## Key Features
 
-The line number options is used for [LLMCoder](https://github.com/ChrisTorng/LLMCoder), it uses code with line numbers and ask LLM to use specific Markdown diff output, then apply the Markdown diff to the source code. It helps you sync the output of LLM back to your source code with only one paste action, and save the output tokens for only diff part.
+- Customize your sync process by modifying the `SyncCommand` file to work with your preferred sync tools, not limited to `LLMCoderSync` and `ClaudeSync`.
+- Easily select current working files for synchronization, optimizing Claude token usage for longer conversations.
+- Line number options designed for [LLMCoder](https://github.com/ChrisTorng/LLMCoder), enabling efficient code updates using specific Markdown diff output.
+- Streamlined workflow: Sync LLM output back to your source code with a single paste action, saving output tokens by focusing on diff parts only.
 
-# Build & Usage
+## Build & Usage
 
-```
-pip install flask pyinstaller
-pyinstaller LLMCoderSync.spec
-pyinstaller LLMCoderServer.spec
-```
+1. Install required packages:
+   ```
+   pip install flask pyinstaller
+   ```
 
-Run `/path/to/LLMCoderSync/dist/LLMCoderServer/LLMCoderServer` from your project dir `current`, open http://localhost:5000 for WebUI. Check all the codes that needs to be synced. If your are not using [LLMCoder](https://github.com/ChrisTorng/LLMCoder), you should uncheck all line numbers.
+2. Build the executables:
+   ```
+   pyinstaller LLMCoderSync.spec
+   pyinstaller LLMCoderServer.spec
+   ```
 
-Run `/path/to/LLMCoderSync/dist/LLMCoderSync` to copy `current` dir into another `current.sync` dir, for all files synced, with specific line numberred files to sync to LLM (I'm using Claude).
+3. From your project directory, run:
+   ```
+   /path/to/LLMCoderSync/dist/LLMCoderServer/LLMCoderServer
+   ```
 
-While `claudesync project select`, select the project dir to `current.sync`.
+4. Open http://localhost:5000 to access the web interface.
 
-Then you can click `Sync All` button to run `SyncCommand`, make sure the sync is working.
+5. Select the files you want to sync. If you're not using [LLMCoder](https://github.com/ChrisTorng/LLMCoder), uncheck all line numbers.
 
-# Working with [LLMCoder](https://github.com/ChrisTorng/LLMCoder)
+6. Run the following command to copy your `current` directory to `current.sync`, including all synced files with specified line-numbered files:
+   ```
+   /path/to/LLMCoderSync/dist/LLMCoderSync
+   ```
 
-Copy `SyncCommand` or `SyncCommand.cmd` (Windows) into your project dir. Add `.claudeignore` file with content:
-```
-.*
-LICENSE
-SyncCommand*
-```
-Open WebUI, unckech anything that should not be synced or adding line numbers, then `Sync All`.
+7. Use `claudesync project select` to choose the `current.sync` directory as your project directory.
 
-Set Claude's Project custom instructions with then content of [instructions\markdown.instruction.en.md](instructions\markdown.instruction.en.md) after your own specific instructions.
+8. Click the `Sync All` button in the web interface to execute `SyncCommand` and verify that synchronization is working correctly.
 
-Ask Claude to modify code, it should follow the instructions, output Markdown diff.
+## Integration with [LLMCoder](https://github.com/ChrisTorng/LLMCoder)
 
-On [LLMCoder online page](https://christorng.github.io/LLMCoder/), paste the source code, then paste the Markdown diff, it will apply the changes to the source and copy to clipboard automatically. You can paste back to IDE to overwrite to your source.
+1. Copy `SyncCommand` or `SyncCommand.cmd` (for Windows) into your project directory.
 
-Click `Sync All` button on WebUI after each time the codes are modified, ready for the next prompt to reference the latest code with line numbers.
+2. Create a `.claudeignore` file with the following content:
+   ```
+   .*
+   LICENSE
+   SyncCommand*
+   ```
 
-# Future plan
+3. In  the web interface, uncheck any files that should not be synced or have line numbers added, then click `Sync All`.
 
+4. Set Claude's Project custom instructions with the content from [instructions/markdown.instruction.en.md](instructions/markdown.instruction.en.md) after your specific instructions.
 
-* **Integrate LLMCoder into LLMCoderSync WebUI**
+5. When asking Claude to modify code, it will follow the instructions and output a Markdown diff.
 
-  So you can select a code file, paste Markdown, then it writes the result directly into the source, saves you more time.
-  
-* **Apply multiple files at once**
+6. On the [LLMCoder online page](https://christorng.github.io/LLMCoder/), paste your source code, then paste the Markdown diff. It will automatically apply the changes to the source and copy to your clipboard.
 
-  Ask LLM to add file names in Markdown diff, then it can modify them all at once.
+7. Paste the updated code back into your IDE to overwrite the source.
 
-* **Fix line number errors automatically**
+8. Click the `Sync All` button on the web interface after each code modification to ensure the latest code with line numbers is ready for the next prompt.
 
-  Sometimes the LLM output wrong first/last line number. It tries to look for correct line number and apply without manual fix.
+## Future Plans
 
-* **Auto Sync**
+- **Integrate LLMCoder into LLMCoderSync WebUI**
 
-  Detect file changes, then sync automatically.
+  Select a code file, paste Markdown, and write the result directly into the source, saving more time.
 
-* **Browser extension**
+- **Apply multiple file changes at once**
 
-  Integrate with Claude.ai website, saves even more times copy&paste between IDE and LLMCoderSync.
+  Enhance LLM to include file names in Markdown diffs for simultaneous modifications across multiple files.
+
+- **Automatic line number error correction**
+
+  Implement intelligent detection and correction of incorrect first/last line numbers in LLM output.
+
+- **Auto Sync**
+
+  Detect file changes and sync automatically.
+
+- **Browser extension**
+
+  Integrate with the Claude.ai website for a more streamlined workflow between IDE and LLMCoderSync.
