@@ -54,12 +54,19 @@ Click `Sync All` button on WebUI after each time the codes are modified, ready f
 * **Integrate LLMCoder into LLMCoderSync WebUI**
 
   So you can select a code file, paste Markdown, then it writes the result directly into the source, saves you more time.
+  
 * **Apply multiple files at once**
 
   Ask LLM to add file names in Markdown diff, then it can modify them all at once.
+
 * **Fix line number errors automatically**
 
   Sometimes the LLM output wrong first/last line number. It tries to look for correct line number and apply without manual fix.
+
 * **Auto Sync**
 
   Detect file changes, then sync automatically.
+
+* **Browser extension**
+
+  Integrate with Claude.ai website, saves even more times copy&paste between IDE and LLMCoderSync.
