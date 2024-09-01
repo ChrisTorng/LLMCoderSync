@@ -46,6 +46,9 @@ The LLMCoderServer web interface displays all files in your project, excluding t
 
 ## Integration with [LLMCoder](https://github.com/ChrisTorng/LLMCoder)
 
+The key point of [LLMCoder](https://github.com/ChrisTorng/LLMCoder) is using Markdown diff format for less token usage. It apply the diff to the source code to get the modified result code. You can see the README.md of [LLMCoder](https://github.com/ChrisTorng/LLMCoder) for more detail.
+
+
 1. Copy `SyncCommand` or `SyncCommand.cmd` (for Windows) into your project directory.
 
 2. Create a `.claudeignore` file with the following content:
