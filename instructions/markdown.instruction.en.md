@@ -61,13 +61,12 @@ MULTILINE_TEXT_TO_REPLACE
 
 **Replace**
 * From: `12.     function old_function() {`
-* To: `15.     }`
+* To: `14.     return value;`
 ````js
     function new_function() {
       var result = 'New function'
 
       return result;
-    }
 ````
 </antArtifact>
 

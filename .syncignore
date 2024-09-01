@@ -1,2 +1,4 @@
-images\LLMCoderServer.png
-instructions\instruction.zh-tw.md
+.\LLMCoderServer.html
+.\README.md
+static\LLMCoderServer.css
+static\LLMCoderServer.js

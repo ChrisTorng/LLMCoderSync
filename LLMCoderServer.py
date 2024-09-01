@@ -13,6 +13,15 @@ else:
     # 如果是開發環境
     app = Flask(__name__, template_folder='.', static_folder='static')
 
+# Create sync folder on startup
+current_folder = os.getcwd()
+parent_folder = os.path.dirname(current_folder)
+current_folder_name = os.path.basename(current_folder)
+sync_folder_name = f"{current_folder_name}.sync"
+sync_folder_path = os.path.join(parent_folder, sync_folder_name)
+if not os.path.exists(sync_folder_path):
+    os.makedirs(sync_folder_path)
+
 def list_files(start_path):
     gitignore_patterns, claudeignore_patterns, syncignore_patterns = get_ignore_patterns(start_path)
     linenumberignore_patterns = read_ignore_file(os.path.join(start_path, '.linenumberignore'))
