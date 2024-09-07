@@ -12,10 +12,10 @@ def read_ignore_file(path):
             ignore_patterns = [line.strip() for line in f if line.strip() and not line.startswith('#')]
     return ignore_patterns
 
-def get_ignore_patterns(current_folder):
+def get_ignore_patterns(current_folder, sync_folder):
     gitignore_path = os.path.join(current_folder, '.gitignore')
-    claudeignore_path = os.path.join(current_folder, '.claudeignore')
-    syncignore_path = os.path.join(current_folder, '.syncignore')
+    claudeignore_path = os.path.join(sync_folder, '.claudeignore')
+    syncignore_path = os.path.join(sync_folder, '.syncignore')
     gitignore_patterns = read_ignore_file(gitignore_path)
     claudeignore_patterns = read_ignore_file(claudeignore_path)
     syncignore_patterns = read_ignore_file(syncignore_path)
@@ -35,10 +35,10 @@ def should_ignore(path, gitignore_patterns, claudeignore_patterns, syncignore_pa
             return True
     return False
 
-def get_ignore_patterns(current_folder):
+def get_ignore_patterns(current_folder, sync_folder):
     gitignore_path = os.path.join(current_folder, '.gitignore')
-    claudeignore_path = os.path.join(current_folder, '.claudeignore')
-    syncignore_path = os.path.join(current_folder, '.syncignore')
+    claudeignore_path = os.path.join(sync_folder, '.claudeignore')
+    syncignore_path = os.path.join(sync_folder, '.syncignore')
     gitignore_patterns = read_ignore_file(gitignore_path)
     claudeignore_patterns = read_ignore_file(claudeignore_path)
     syncignore_patterns = read_ignore_file(syncignore_path)
@@ -92,8 +92,13 @@ def sync_folder(src_folder, dest_folder, gitignore_patterns, claudeignore_patter
 
 def main():
     current_folder = os.getcwd()
-    gitignore_patterns, claudeignore_patterns, syncignore_patterns = get_ignore_patterns(current_folder)
-    linenumberignore_patterns = read_ignore_file(os.path.join(current_folder, '.linenumberignore'))
+    parent_folder = os.path.dirname(current_folder)
+    current_folder_name = os.path.basename(current_folder)
+    sync_folder_name = f"{current_folder_name}.sync"
+    sync_folder_path = os.path.join(parent_folder, sync_folder_name)
+    
+    gitignore_patterns, claudeignore_patterns, syncignore_patterns = get_ignore_patterns(current_folder, sync_folder_path)
+    linenumberignore_patterns = read_ignore_file(os.path.join(sync_folder_path, '.linenumberignore'))
     
     parent_folder = os.path.dirname(current_folder)
     current_folder_name = os.path.basename(current_folder)
