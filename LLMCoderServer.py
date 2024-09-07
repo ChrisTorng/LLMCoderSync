@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 from flask import Flask, render_template, request, jsonify, send_from_directory
-from LLMCoderSync import should_ignore, get_ignore_patterns, should_sync, should_add_line_numbers, read_ignore_file
+from LLMCoderSync import should_ignore, get_ignore_patterns, should_sync, should_add_line_numbers, read_ignore_file, main as llm_coder_sync
 
 if getattr(sys, 'frozen', False):
     # 如果是打包後的環境
@@ -23,7 +23,7 @@ if not os.path.exists(sync_folder_path):
     os.makedirs(sync_folder_path)
 
 # Create necessary files in sync folder
-for file_name in ['.claudesync', '.syncignore', '.linenumberignore']:
+for file_name in ['.claudeignore', '.syncignore', '.linenumberignore']:
     file_path = os.path.join(sync_folder_path, file_name)
     if not os.path.exists(file_path):
         open(file_path, 'w').close()
@@ -125,6 +125,9 @@ def update_line_numbers():
 
 @app.route('/sync', methods=['POST'])
 def sync():
+    # Call LLMCoderSync.py
+    llm_coder_sync()
+
     # Create the SyncCommand file
     sync_command_path = os.path.join(sync_folder_path, 'SyncCommand')
     if os.name == 'nt':
