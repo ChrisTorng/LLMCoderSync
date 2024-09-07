@@ -36,7 +36,7 @@ if not os.path.exists(sync_command_path):
     open(sync_command_path, 'w').close()
 
 def list_files(start_path):
-    gitignore_patterns, claudeignore_patterns, syncignore_patterns = get_ignore_patterns(start_path)
+    gitignore_patterns, claudeignore_patterns, syncignore_patterns = get_ignore_patterns(start_path, sync_folder_path)
     linenumberignore_patterns = read_ignore_file(os.path.join(sync_folder_path, '.linenumberignore'))
     file_list = []
     for root, dirs, files in os.walk(start_path, topdown=True):
