@@ -22,9 +22,22 @@ sync_folder_path = os.path.join(parent_folder, sync_folder_name)
 if not os.path.exists(sync_folder_path):
     os.makedirs(sync_folder_path)
 
+# Create necessary files in sync folder
+for file_name in ['.claudesync', '.syncignore', '.linenumberignore']:
+    file_path = os.path.join(sync_folder_path, file_name)
+    if not os.path.exists(file_path):
+        open(file_path, 'w').close()
+
+# Create SyncCommand files in sync folder
+sync_command_path = os.path.join(sync_folder_path, 'SyncCommand')
+if os.name == 'nt':
+    sync_command_path += '.cmd'
+if not os.path.exists(sync_command_path):
+    open(sync_command_path, 'w').close()
+
 def list_files(start_path):
     gitignore_patterns, claudeignore_patterns, syncignore_patterns = get_ignore_patterns(start_path)
-    linenumberignore_patterns = read_ignore_file(os.path.join(start_path, '.linenumberignore'))
+    linenumberignore_patterns = read_ignore_file(os.path.join(sync_folder_path, '.linenumberignore'))
     file_list = []
     for root, dirs, files in os.walk(start_path, topdown=True):
         rel_root = os.path.relpath(root, start_path)
@@ -52,11 +65,11 @@ def index():
 def update_sync():
     file_path = request.json['file']
     should_sync = request.json['should_sync']
-    syncignore_path = os.path.join(os.getcwd(), '.syncignore')
-    
-    # Get all files in the current directory
+    syncignore_path = os.path.join(sync_folder_path, '.syncignore')
+
+       # Get all files in the current directory
     all_files = [f for f in list_files(os.getcwd()) if f[0] != '.syncignore']
-    
+
     # Create .syncignore if it doesn't exist
     if not os.path.exists(syncignore_path):
         open(syncignore_path, 'w').close()
@@ -83,8 +96,8 @@ def update_sync():
 def update_line_numbers():
     file_path = request.json['file']
     should_add_line_numbers = request.json['should_add_line_numbers']
-    linenumberignore_path = os.path.join(os.getcwd(), '.linenumberignore')
-    
+    linenumberignore_path = os.path.join(sync_folder_path, '.linenumberignore')
+
     # Get all files in the current directory
     all_files = [f for f in list_files(os.getcwd()) if f[0] != '.linenumberignore']
     
@@ -112,10 +125,8 @@ def update_line_numbers():
 
 @app.route('/sync', methods=['POST'])
 def sync():
-    current_folder = os.getcwd()
-    
     # Create the SyncCommand file
-    sync_command_path = os.path.join(current_folder, 'SyncCommand')
+    sync_command_path = os.path.join(sync_folder_path, 'SyncCommand')
     if os.name == 'nt':
         sync_command_path += '.cmd'
    

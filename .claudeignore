@@ -1,7 +1,0 @@
-images/
-instructions/
-.*
-LICENSE
-#README.md
-*.spec
-SyncCommand*
